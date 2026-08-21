@@ -55,14 +55,14 @@ export default function App() {
         return;
       }
 
-      // Map answers to human readable format
+      // Map answers to human readable format using the English text as keys
       const formattedData: Record<string, any> = {
         access_key: accessKey,
         subject: 'New Questionnaire Submission! 💌',
       };
 
       questions.forEach(q => {
-        formattedData[q.text] = finalAnswers[q.id] || 'No answer';
+        formattedData[q.text.en] = finalAnswers[q.id] || 'No answer';
       });
 
       await fetch('https://api.web3forms.com/submit', {
@@ -168,7 +168,7 @@ export default function App() {
           <ProgressIndicator current={currentIndex + 1} total={questions.length} />
           
           <QuestionScreen 
-            questionText={currentQuestion.text} 
+            question={currentQuestion} 
             isAnimating={isAnimating}
           >
             {renderQuestionInput()}

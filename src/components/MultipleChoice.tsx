@@ -9,17 +9,19 @@ interface Props {
 }
 
 export default function MultipleChoice({ question, onAnswer, defaultValue = '' }: Props) {
-  // If the default value isn't one of the standard options, it must be an "Other" answer
-  const isOtherDefault = defaultValue !== '' && !question.options?.includes(defaultValue);
-  const [selected, setSelected] = useState<string>(isOtherDefault ? 'इतर' : defaultValue);
+  // If the default value isn't one of the standard options (by english key), it must be an "Other" answer
+  const standardOptionKeys = question.options?.map(o => o.en) || [];
+  const isOtherDefault = defaultValue !== '' && !standardOptionKeys.includes(defaultValue);
+  
+  const [selected, setSelected] = useState<string>(isOtherDefault ? 'Other' : defaultValue);
   const [otherValue, setOtherValue] = useState<string>(isOtherDefault ? defaultValue : '');
 
-  const handleSelect = (option: string) => {
-    setSelected(option);
+  const handleSelect = (optionKey: string) => {
+    setSelected(optionKey);
     
     // Auto-advance for standard options
     setTimeout(() => {
-      onAnswer(option);
+      onAnswer(optionKey);
     }, 350);
   };
 
@@ -32,14 +34,14 @@ export default function MultipleChoice({ question, onAnswer, defaultValue = '' }
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
       {question.options?.map((option) => {
-        if (option === 'इतर') return null; // We'll render this specifically below
+        if (option.en === 'Other') return null; // We'll render this specifically below
 
-        const isSelected = selected === option;
+        const isSelected = selected === option.en;
         
         return (
           <button
-            key={option}
-            onClick={() => handleSelect(option)}
+            key={option.en}
+            onClick={() => handleSelect(option.en)}
             className="subtle-scale"
             style={{
               width: '100%',
@@ -48,36 +50,39 @@ export default function MultipleChoice({ question, onAnswer, defaultValue = '' }
               backgroundColor: isSelected ? 'var(--accent-light)' : 'var(--bg-secondary)',
               border: `1px solid ${isSelected ? 'var(--accent-color)' : 'var(--border-color)'}`,
               borderRadius: '8px',
-              fontSize: '15px',
               color: 'var(--text-primary)',
               outline: 'none',
               cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '4px'
             }}
           >
-            {option}
+            <span style={{ fontSize: '16px' }}>{option.mr}</span>
+            <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{option.en}</span>
           </button>
         );
       })}
 
-      {question.options?.includes('इतर') && (
+      {standardOptionKeys.includes('Other') && (
         <div style={{ position: 'relative', width: '100%' }}>
           <input
             type="text"
             value={otherValue}
             onChange={(e) => {
               setOtherValue(e.target.value);
-              setSelected('इतर');
+              setSelected('Other');
             }}
-            onFocus={() => setSelected('इतर')}
+            onFocus={() => setSelected('Other')}
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleOtherSubmit();
             }}
-            placeholder="इतर..."
+            placeholder="इतर... / Other..."
             style={{
               width: '100%',
               padding: '16px 48px 16px 20px',
-              backgroundColor: selected === 'इतर' || otherValue ? 'var(--bg-primary)' : 'var(--bg-secondary)',
-              border: `1px solid ${selected === 'इतर' || otherValue ? 'var(--accent-color)' : 'var(--border-color)'}`,
+              backgroundColor: selected === 'Other' || otherValue ? 'var(--bg-primary)' : 'var(--bg-secondary)',
+              border: `1px solid ${selected === 'Other' || otherValue ? 'var(--accent-color)' : 'var(--border-color)'}`,
               borderRadius: '8px',
               fontSize: '15px',
               color: 'var(--text-primary)',

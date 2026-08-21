@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react';
+import type { Question } from '../questions';
 
 interface Props {
   children: ReactNode;
-  questionText: string;
+  question: Question;
   isAnimating: boolean;
 }
 
-export default function QuestionScreen({ children, questionText, isAnimating }: Props) {
+export default function QuestionScreen({ children, question, isAnimating }: Props) {
   return (
     <div 
       style={{
@@ -24,15 +25,26 @@ export default function QuestionScreen({ children, questionText, isAnimating }: 
       }}
     >
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <h2 style={{
-          fontSize: '26px',
-          lineHeight: '1.3',
-          marginBottom: '40px',
-          color: 'var(--text-primary)',
-          letterSpacing: '0.02em',
-        }}>
-          {questionText}
-        </h2>
+        <div style={{ marginBottom: '40px' }}>
+          <h2 style={{
+            fontSize: '26px',
+            lineHeight: '1.3',
+            color: 'var(--text-primary)',
+            letterSpacing: '0.02em',
+            marginBottom: '8px'
+          }}>
+            {question.text.mr}
+          </h2>
+          <p style={{
+            fontSize: '14px',
+            color: 'var(--text-muted)',
+            fontFamily: 'var(--font-sans)',
+            letterSpacing: '0.01em',
+            opacity: 0.8
+          }}>
+            {question.text.en}
+          </p>
+        </div>
         
         <div style={{ width: '100%' }}>
           {children}
