@@ -103,6 +103,15 @@ export default function App() {
     }, 400); // Wait for fade out
   };
 
+  const handleReset = () => {
+    localStorage.removeItem('questionnaire_index');
+    localStorage.removeItem('questionnaire_answers');
+    setAnswers({});
+    setCurrentIndex(0);
+    setIsFinished(false);
+    setShowOpening(true);
+  };
+
   const currentQuestion = questions[currentIndex];
 
   const renderQuestionInput = () => {
@@ -176,7 +185,7 @@ export default function App() {
         </div>
       )}
 
-      {isFinished && <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column' }}><FinalScreen /></div>}
+      {isFinished && <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column' }}><FinalScreen onReset={handleReset} /></div>}
     </>
   );
 }

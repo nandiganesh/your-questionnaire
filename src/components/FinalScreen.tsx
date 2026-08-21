@@ -1,28 +1,37 @@
-export default function FinalScreen() {
+import { RotateCcw } from 'lucide-react';
+
+interface Props {
+  onReset: () => void;
+}
+
+export default function FinalScreen({ onReset }: Props) {
   return (
     <div style={{
-      flex: 1,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'space-between',
+      height: '100%',
       padding: '24px',
       textAlign: 'center',
+      animation: 'fade-in 1s ease-out'
     }}>
-      <div className="slide-up" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+      <div className="slide-up" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '32px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <h1 style={{
-            fontSize: '28px',
+            fontSize: '42px',
             fontFamily: 'var(--font-serif)',
             color: 'var(--text-primary)',
             letterSpacing: '0.05em',
+            margin: 0
           }}>
             धन्यवाद
           </h1>
           <p style={{
-            fontSize: '14px',
+            fontSize: '16px',
             color: 'var(--text-muted)',
             letterSpacing: '0.05em',
+            margin: 0
           }}>
             Thank you.
           </p>
@@ -33,6 +42,7 @@ export default function FinalScreen() {
           color: 'var(--text-primary)',
           fontFamily: 'var(--font-serif)',
           fontStyle: 'italic',
+          margin: 0
         }}>
           Now I know a little more about you.
         </p>
@@ -53,6 +63,31 @@ export default function FinalScreen() {
           <span style={{ fontSize: '12px', color: 'var(--text-muted)', opacity: 0.6 }}>🤍</span>
         </div>
       </div>
+
+      <button 
+        onClick={onReset}
+        className="subtle-scale"
+        style={{
+          background: 'none',
+          border: 'none',
+          color: 'var(--text-muted)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '16px',
+          cursor: 'pointer',
+          fontFamily: 'var(--font-sans)',
+          fontSize: '14px',
+          opacity: 0.7,
+          transition: 'opacity 0.2s',
+          marginBottom: '16px'
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+        onMouseLeave={(e) => e.currentTarget.style.opacity = '0.7'}
+      >
+        <RotateCcw size={16} />
+        Start Again
+      </button>
     </div>
   );
 }
